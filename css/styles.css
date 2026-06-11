@@ -13,3 +13,28 @@ body { font-family: system-ui, -apple-system, sans-serif; background:#0f0f1a; co
 .wizard-step.active { display:block; }
 .chip { display:inline-block; padding:8px 16px; background:#25253a; border-radius:999px; margin:4px; cursor:pointer; }
 .chip.active { background:#e94560; color:white; }
+.chip {
+    display: inline-block;
+    padding: 10px 16px;
+    background: #25253a;
+    border-radius: 999px;
+    margin: 4px;
+    cursor: pointer;
+    font-size: 0.95em;
+}
+.chip.active {
+    background: #e94560;
+    color: white;
+}
+.btn {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.05em;
+    cursor: pointer;
+}
+.btn-success {
+    background: #00d68f;
+    color: black;
+    font-weight: bold;
+}
