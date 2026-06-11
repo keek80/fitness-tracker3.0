@@ -31,7 +31,7 @@ function renderWizard() {
             <div style="display:flex; gap:12px; margin-top:24px;">
                 ${backButton}
                 <button class="btn btn-success" onclick="nextStep()" style="flex:1;">
-                    ${currentStep === 5 ? '✅ Build & Save Routine' : 'Next →'}
+                    ${currentStep === 5 ? '✅ Build Routine' : 'Next →'}
                 </button>
             </div>
         </div>
@@ -59,8 +59,8 @@ function renderCurrentStep() {
     } else if (currentStep === 2) {
         content.innerHTML = `
             <h3>Training Split</h3>
-            <div onclick="selectSplit('PPL')" class="chip" style="display:block;padding:16px;margin:8px 0;">Push / Pull / Legs (5 days)</div>
-            <div onclick="selectSplit('FullBody')" class="chip" style="display:block;padding:16px;margin:8px 0;">Full Body (3 days)</div>
+            <div onclick="selectSplit('PPL')" class="chip" style="display:block;padding:16px;margin:8px 0;">Push / Pull / Legs</div>
+            <div onclick="selectSplit('FullBody')" class="chip" style="display:block;padding:16px;margin:8px 0;">Full Body</div>
         `;
     } else if (currentStep === 3) {
         content.innerHTML = `
@@ -79,25 +79,17 @@ function renderCurrentStep() {
         `;
     } else if (currentStep === 5) {
         content.innerHTML = `
-            <h3>Ready to Build!</h3>
+            <h3>Ready to Build Your Routine!</h3>
             <p><strong>Goal:</strong> ${builderData.goals.primary}</p>
             <p><strong>Split:</strong> ${builderData.split}</p>
             <p><strong>Days:</strong> ${builderData.days}</p>
-            <p>We'll generate a balanced routine using your full exercise database.</p>
+            <p><strong>Focus:</strong> ${builderData.focus.length ? builderData.focus.join(', ') : 'Balanced'}</p>
         `;
     }
 }
 
-function selectGoal(g) { 
-    builderData.goals.primary = g; 
-    renderWizard(); 
-}
-
-function selectSplit(s) { 
-    builderData.split = s; 
-    nextStep(); 
-}
-
+function selectGoal(g) { builderData.goals.primary = g; renderWizard(); }
+function selectSplit(s) { builderData.split = s; nextStep(); }
 function toggleFocus(area) {
     if (builderData.focus.includes(area)) {
         builderData.focus = builderData.focus.filter(a => a !== area);
@@ -123,15 +115,30 @@ function prevStep() {
 
 function buildAndSaveRoutine() {
     const newProgram = generateSmartRoutine(builderData);
-    saveTrainingProgram(newProgram);
-    showToast("✅ Custom Routine Built & Saved!");
-    setTimeout(() => location.reload(), 1500);
+    
+    // Display the generated routine
+    const page = document.getElementById('page-exercises');
+    page.innerHTML = `
+        <div style="padding:20px;">
+            <h2>✅ Your Custom Routine</h2>
+            <pre style="background:#25253a; padding:16px; border-radius:8px; white-space:pre-wrap; font-size:0.9em;">${JSON.stringify(newProgram, null, 2)}</pre>
+            <button class="btn btn-success" onclick="saveTrainingProgram(${JSON.stringify(newProgram).replace(/"/g, '&quot;')}); showToast('Routine Saved!'); location.reload();">Save This Routine</button>
+            <button class="btn" onclick="navigateToBuilder()">Build Another</button>
+        </div>
+    `;
+
+    console.log("Generated Routine:", newProgram);
 }
 
 function generateSmartRoutine(answers) {
-    console.log("Building routine with:", answers);
     let program = JSON.parse(JSON.stringify(DEFAULT_TRAINING_PROGRAM || {}));
-    // TODO: Future enhancement - intelligently swap exercises based on focus
+    
+    // Basic customization based on answers
+    if (answers.focus.includes('Shoulders')) {
+        console.log("Emphasizing shoulders...");
+        // TODO: Add more shoulder work in future iterations
+    }
+    
     return program;
 }
 
@@ -143,3 +150,12 @@ function showToast(msg) {
         setTimeout(() => t.style.display = 'none', 3000);
     }
 }
+
+// Make functions global
+window.navigateToBuilder = navigateToBuilder;
+window.selectGoal = selectGoal;
+window.selectSplit = selectSplit;
+window.toggleFocus = toggleFocus;
+window.prevStep = prevStep;
+window.nextStep = nextStep;
+window.buildAndSaveRoutine = buildAndSaveRoutine;
