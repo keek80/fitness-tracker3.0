@@ -13,6 +13,12 @@ function renderExercises() {
 
     page.innerHTML = `
         <div class="section-title">🛠️ Exercise Manager</div>
+        
+        <!-- NEW: Routine Builder Button -->
+        <button onclick="navigateToBuilder()" 
+                style="width:100%; padding:18px; font-size:1.15em; background:#e94560; color:white; border:none; border-radius:12px; margin:12px 0 20px 0; box-shadow:0 4px 12px rgba(233,69,96,0.3);">
+            ✨ Build New Workout Routine (Wizard)
+        </button>
 
         ${custom ? `
             <div class="card" style="border-left: 3px solid var(--accent-orange); padding: 12px 14px;">
@@ -58,6 +64,51 @@ function renderExercises() {
                         ➕ Add Exercise
                     </button>
                 </div>
+            `).join('')}
+        </div>
+
+        <button class="btn btn-success" style="margin-top:16px" onclick="addDay()">
+            ➕ Add Training Day
+        </button>
+
+        ${custom ? `
+            <button class="btn btn-danger" style="margin-top:10px" onclick="resetProgram()">
+                🔄 Reset to Default Program
+            </button>
+        ` : ''}
+        
+        <!-- Rest of your modals remain unchanged -->
+        <!-- Exercise Form Modal -->
+        <div id="exModal" class="ex-modal hidden">
+            <div class="ex-modal-overlay" onclick="closeExModal()"></div>
+            <div class="ex-modal-content">
+                <div class="ex-modal-header">
+                    <h3 id="exModalTitle">Edit</h3>
+                    <button class="ex-modal-close" onclick="closeExModal()">✕</button>
+                </div>
+                <div id="exModalBody"></div>
+            </div>
+        </div>
+        <!-- Exercise Database Picker Modal -->
+        <div id="exDBPicker" class="ex-db-picker hidden">
+            <div class="ex-db-overlay" onclick="closeExercisePicker()"></div>
+            <div class="ex-db-content">
+                <div class="ex-db-header">
+                    <h3>📚 Exercise Database</h3>
+                    <button class="ex-modal-close" onclick="closeExercisePicker()">✕</button>
+                </div>
+                <div class="ex-db-search-wrap">
+                    <input type="text" id="dbSearchInput" class="ex-db-search"
+                        placeholder="🔍 Search exercises..."
+                        oninput="dbPickerSearch=this.value; renderDBList()"
+                        autocomplete="off" autocorrect="off" spellcheck="false">
+                </div>
+                <div class="ex-db-categories" id="dbCategories"></div>
+                <div class="ex-db-list" id="dbList"></div>
+            </div>
+        </div>
+    `;
+}
             `).join('')}
         </div>
 
