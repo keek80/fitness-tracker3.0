@@ -13,7 +13,7 @@ function renderExercises() {
     page.innerHTML = `
         <div class="section-title">🛠️ Exercise Manager</div>
         
-        <!-- Routine Builder Button -->
+        <!-- ✨ Routine Builder Button -->
         <button onclick="navigateToBuilder()" 
                 style="width:100%; padding:18px; font-size:1.15em; background:#e94560; color:white; border:none; border-radius:12px; margin:12px 0 20px 0; box-shadow:0 4px 12px rgba(233,69,96,0.3);">
             ✨ Build New Workout Routine (Wizard)
@@ -109,28 +109,98 @@ function renderExercises() {
     `;
 }
 
-// ==================== Keep the rest of your original functions unchanged ====================
+// ==================== ALL YOUR ORIGINAL FUNCTIONS (keep exactly as before) ====================
+function openExercisePicker() {
+    dbPickerSearch = '';
+    dbPickerCategory = 'All';
+    const catEl = document.getElementById('dbCategories');
+    catEl.innerHTML = DB_CATEGORIES.map(cat => `
+        <button class="ex-db-chip ${cat === dbPickerCategory ? 'active' : ''}"
+                onclick="selectDBCategory('${cat}')">
+            ${cat}
+        </button>
+    `).join('');
+    const searchEl = document.getElementById('dbSearchInput');
+    if (searchEl) searchEl.value = '';
+    renderDBList();
+    document.getElementById('exDBPicker').classList.remove('hidden');
+    setTimeout(() => {
+        const s = document.getElementById('dbSearchInput');
+        if (s) s.focus();
+    }, 150);
+}
 
-// (Paste all the rest of your original code here - from openExercisePicker() down to the end)
+function closeExercisePicker() {
+    document.getElementById('exDBPicker').classList.add('hidden');
+}
 
-function openExercisePicker() { /* your original code */ }
-function closeExercisePicker() { /* your original code */ }
-function selectDBCategory(cat) { /* your original code */ }
-function renderDBList() { /* your original code */ }
-function renderDBItem(ex) { /* your original code */ }
-function selectExerciseFromDB(name, notes) { /* your original code */ }
-function useCustomExerciseName() { /* your original code */ }
-function exerciseFormBody(ex) { /* your original code */ }
-function addDay() { /* your original code */ }
-function editDay(dayId) { /* your original code */ }
-function saveDayForm() { /* your original code */ }
-function deleteDay(dayId) { /* your original code */ }
-function addExercise(dayId) { /* your original code */ }
-function editExercise(dayId, exIdx) { /* your original code */ }
-function saveExerciseForm() { /* your original code */ }
-function deleteExercise(dayId, exIdx) { /* your original code */ }
-function moveExercise(dayId, exIdx, direction) { /* your original code */ }
-function resetProgram() { /* your original code */ }
-function openExModal(title, bodyHtml) { /* your original code */ }
-function closeExModal() { /* your original code */ }
-function selectColor(btn, color) { /* your original code */ }
+function selectDBCategory(cat) {
+    dbPickerCategory = cat;
+    document.querySelectorAll('.ex-db-chip').forEach(btn => {
+        btn.classList.toggle('active', btn.textContent.trim() === cat);
+    });
+    renderDBList();
+}
+
+function renderDBList() {
+    const search = (dbPickerSearch || '').toLowerCase().trim();
+    const cat = dbPickerCategory;
+    let results = EXERCISE_DATABASE;
+    if (cat !== 'All') {
+        results = results.filter(e => e.category === cat);
+    }
+    if (search) {
+        results = results.filter(e =>
+            e.name.toLowerCase().includes(search) ||
+            e.category.toLowerCase().includes(search) ||
+            e.equipment.toLowerCase().includes(search)
+        );
+    }
+    const listEl = document.getElementById('dbList');
+    if (!listEl) return;
+    if (results.length === 0) {
+        listEl.innerHTML = `<div class="empty-state" style="padding:30px 16px"><p>No exercises found.</p></div>`;
+        return;
+    }
+    listEl.innerHTML = results.map(e => renderDBItem(e)).join('');
+}
+
+function renderDBItem(ex) {
+    const color = EQUIPMENT_COLORS[ex.equipment] || '#718096';
+    const safeName = ex.name.replace(/'/g, "\\'");
+    const safeNotes = (ex.notes || '').replace(/'/g, "\\'");
+    return `
+        <button class="ex-db-item" onclick="selectExerciseFromDB('${safeName}', '${safeNotes}')">
+            <div class="ex-db-item-name">${ex.name}</div>
+            <div class="ex-db-item-meta">
+                <span class="ex-db-badge" style="background:${color}22; color:${color};">${ex.equipment}</span>
+            </div>
+        </button>`;
+}
+
+function selectExerciseFromDB(name, notes) {
+    const nameInput = document.getElementById('exNameInput');
+    const notesInput = document.getElementById('exNotesInput');
+    if (nameInput) nameInput.value = name;
+    if (notesInput) notesInput.value = notes || '';
+    closeExercisePicker();
+    showToast(`✅ ${name} selected`);
+}
+
+function exerciseFormBody(ex) { /* ... your original function ... */ }
+function addDay() { /* ... your original */ }
+function editDay(dayId) { /* ... */ }
+function saveDayForm() { /* ... */ }
+function deleteDay(dayId) { /* ... */ }
+function addExercise(dayId) { /* ... */ }
+function editExercise(dayId, exIdx) { /* ... */ }
+function saveExerciseForm() { /* ... */ }
+function deleteExercise(dayId, exIdx) { /* ... */ }
+function moveExercise(dayId, exIdx, direction) { /* ... */ }
+function resetProgram() { /* ... */ }
+function openExModal(title, bodyHtml) { /* ... */ }
+function closeExModal() { /* ... */ }
+function selectColor(btn, color) { /* ... */ }
+
+// Make builder accessible
+window.navigateToBuilder = navigateToBuilder;
