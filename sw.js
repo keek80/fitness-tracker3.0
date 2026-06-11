@@ -1,4 +1,4 @@
-const CACHE_NAME = 'flt-v1.28';
+const CACHE_NAME = 'flt-v3.00000';
 const ASSETS = [
     './',
     './index.html',
