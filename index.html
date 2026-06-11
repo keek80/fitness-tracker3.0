@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#1a1a2e">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Fat Loss Tracker</title>
+    <link rel="manifest" href="./manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
+    <link rel="apple-touch-icon" href="./icons/icon-192.png">
+    <link rel="stylesheet" href="./css/styles.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+    <!-- ===== AUTH PAGE ===== -->
+    <div id="auth-page" class="hidden"></div>
+
+    <!-- ===== SPLASH SCREEN ===== -->
+    <div id="splash" class="splash">
+        <div class="splash-content">
+            <div class="splash-icon">🏋️</div>
+            <h1>Fat Loss Tracker</h1>
+            <p>385 → 250 lbs</p>
+            <div class="loader"></div>
+        </div>
+    </div>
+
+    <!-- ===== MAIN APP ===== -->
+    <div id="app" class="app hidden">
+
+        <!-- Header -->
+        <header class="header">
+            <h1 id="pageTitle">Dashboard</h1>
+            <button id="menuBtn" class="menu-btn">☰</button>
+        </header>
+
+        <!-- Navigation Drawer -->
+        <div id="drawer" class="drawer hidden">
+            <div class="drawer-overlay" onclick="closeDrawer()"></div>
+            <nav class="drawer-content">
+                <div class="drawer-header">
+                    <div class="drawer-icon">🏋️</div>
+                    <h2>Fat Loss Tracker</h2>
+                    <p class="drawer-subtitle">Transformation Journey</p>
+                </div>
+                <ul>
+                    <li><a href="#" onclick="navigate('dashboard')"  data-page="dashboard">📊 Dashboard</a></li>
+                    <li><a href="#" onclick="navigate('weighin')"    data-page="weighin">⚖️ Weigh-In</a></li>
+                    <li><a href="#" onclick="navigate('gym')"        data-page="gym">💪 Gym Log</a></li>
+                    <li><a href="#" onclick="navigate('analytics')"  data-page="analytics">📈 Analytics</a></li>
+                    <li><a href="#" onclick="navigate('meals')"      data-page="meals">🍽️ Meal Plan</a></li>
+                    <li><a href="#" onclick="navigate('program')"    data-page="program">🏋️ Training Program</a></li>
+                    <li><a href="#" onclick="navigate('exercises')"  data-page="exercises">🛠️ Exercise Manager</a></li>
+                    <li><a href="#" onclick="navigate('settings')"   data-page="settings">⚙️ Settings</a></li>
+                    <li style="border-top:1px solid var(--border); margin-top:8px">
+                        <a href="#" onclick="handleSignOut()" style="color:var(--accent)">🚪 Sign Out</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <!-- Pages Container -->
+        <main id="pages" class="pages">
+            <section id="page-dashboard" class="page active"></section>
+            <section id="page-weighin"   class="page"></section>
+            <section id="page-gym"       class="page"></section>
+            <section id="page-analytics" class="page"></section>
+            <section id="page-meals"     class="page"></section>
+            <section id="page-program"   class="page"></section>
+            <section id="page-exercises" class="page"></section>
+            <section id="page-settings"  class="page"></section>
+            <section id="page-goals"     class="page"></section>
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <button onclick="navigate('dashboard')"  data-page="dashboard"  class="nav-item active">
+                <span class="nav-icon">📊</span>
+                <span class="nav-label">Home</span>
+            </button>
+            <button onclick="navigate('weighin')"    data-page="weighin"    class="nav-item">
+                <span class="nav-icon">⚖️</span>
+                <span class="nav-label">Weigh-In</span>
+            </button>
+            <button onclick="navigate('gym')"        data-page="gym"        class="nav-item">
+                <span class="nav-icon">💪</span>
+                <span class="nav-label">Gym</span>
+            </button>
+            <button onclick="navigate('analytics')"  data-page="analytics"  class="nav-item">
+                <span class="nav-icon">📈</span>
+                <span class="nav-label">Analytics</span>
+            </button>
+            <button onclick="navigate('exercises')"  data-page="exercises"  class="nav-item">
+                <span class="nav-icon">🛠️</span>
+                <span class="nav-label">Edit</span>
+            </button>
+        </nav>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast hidden"></div>
+
+    <!-- Scripts — ORDER MATTERS -->
+    <script src="./js/supabase.js"></script>
+    <script src="./js/auth.js"></script>
+    <script src="./js/data.js"></script>
+    <script src="./js/storage.js"></script>
+    <script src="./js/dashboard.js"></script>
+    <script src="./js/weighin.js"></script>
+    <script src="./js/gym.js"></script>
+    <script src="./js/analytics.js"></script>
+    <script src="./js/meals.js"></script>
+    <script src="./js/program.js"></script>
+    <script src="./js/exercises.js"></script>
+    <script src="./js/settings.js"></script>
+    <script src="./js/goals.js"></script>
+    <script src="./js/app.js"></script>
+</body>
+</html>
